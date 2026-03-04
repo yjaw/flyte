@@ -81,9 +81,14 @@ message DeleteDeliveryConfigRequest {
 message DeleteDeliveryConfigResponse {}
 
 message SendTestNotificationRequest {
-  DeliveryConfigId delivery_config_id = 1 [(buf.validate.field).required = true];
+  // Optional, template metadata required for compiling notification template.
+  // Depending on the delivery config event type,
+  // backend will validate that template_data contains allowed template variables.
+  // Client cannot specify arbitrary template variables even if it provides template data for them,
+  // because it is not guaranteed that in runtime that data will be available.
+  google.protobuf.Struct template_data = 1;
 
-  google.protobuf.Struct template_data = 2; // optional, template metadata required for compiling notification
+  DeliveryOption delivery_option = 2 [(buf.validate.field).required = true];
 }
 
 message SendTestNotificationResponse {}
